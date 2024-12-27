@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+// App.js
+import { useSelector, useDispatch } from 'react-redux';
+import { addEmployee, removeEmployee } from './store/employeeSlice';
+import { increment } from './store/counterSlice';
 
-function App() {
+const App = () => {
+  const counter = useSelector((state) => state.counter);
+  const employees = useSelector((state) => state.employees);
+  const dispatch = useDispatch();
+
+  const handleAddEmployee = () => {
+    const newEmployee = { id: Date.now(), name: 'John Doe' };
+    dispatch(addEmployee(newEmployee));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Counter: {counter}</h1>
+      <button onClick={() => dispatch(increment(1))}>Increment Counter</button>
+
+      <h2>Employees:</h2>
+      <ul>
+        {employees.map((emp) => (
+          <li key={emp.id}>
+            {emp.name} <button onClick={() => dispatch(removeEmployee(emp.id))}>Remove</button>
+          </li>
+        ))}
+      </ul>
+      <button onClick={handleAddEmployee}>Add Employee</button>
     </div>
   );
-}
+};
 
 export default App;
